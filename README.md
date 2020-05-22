@@ -10,7 +10,7 @@ Persona 5 Scramble (JP) file replacement plugin for Nintendo Switch.
 
 ## Setup
 
-1. Download the latest [release](https://github.com/Raytwo/masquerade-rs/releases) of Masquerade-rs and extract its content at the root of your SD card.
+1. Download the latest [release](https://github.com/Raytwo/masquerade-rs/releases) of Masquerade-rs and extract the content of the ``sd`` directory at the root of your SD card.
 2. Edit your system settings (atmosphere/config/system_settings.ini) and make sure to edit the ``ease_nro_restriction`` line so that it is toggled on. (``ease_nro_restriction = u8!0x1``)
 
 ## Usage

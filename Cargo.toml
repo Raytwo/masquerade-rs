@@ -5,7 +5,7 @@ authors = ["Raytwo <raytwost@gmail.com>"]
 edition = "2018"
 
 [package.metadata.skyline]
-titleid = "01001c400e9d8000"
+titleid = "01001C400E9D8000"
 
 [lib]
 crate-type = ["cdylib"]

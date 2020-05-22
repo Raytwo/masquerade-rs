@@ -1,11 +1,13 @@
 #![feature(proc_macro_hygiene)]
 
 use skyline::{hook, install_hook};
-//use std::path::Path;
 use std::slice;
 #[macro_use]
 mod forge;
 use crate::forge::FORGE;
+
+// Latest update: 1.0.3
+const LINKDATA_ENTRY_COUNT: usize = 7321;
 
 #[repr(C)]
 pub enum Region {
@@ -45,7 +47,8 @@ fn hook_initialize_linkdata_table() -> u32 {
 
         let text_address = getRegionAddress(Region::Text) as *mut u8;
         let array_ptr = text_address.offset(0x22458C8);
-        let linkdata_entries = slice::from_raw_parts_mut(array_ptr as *mut LinkdataEntry, 7321);
+        let linkdata_entries =
+            slice::from_raw_parts_mut(array_ptr as *mut LinkdataEntry, LINKDATA_ENTRY_COUNT);
 
         // We need to put it in a separate variable first because it'll die if we use the forge!() macro inside of an iterator.
         let fileids = forge!().get_fileids();
@@ -55,20 +58,20 @@ fn hook_initialize_linkdata_table() -> u32 {
             let id = fileid as usize;
 
             let filesize = match forge!().get_filesize_for_fileid(fileid) {
-                None => 0,
+                None => {
+                    println!(
+                        "[Chihaya] Filesize for FileID {} is 0. Your arcana might be broken.",
+                        id
+                    );
+                    0
+                }
                 Some(size) => size,
             };
-
-            if filesize == 0 {
-                println!(
-                    "[Chihaya] Filesize for FileID {} is 0. Your arcana might be broken.",
-                    id
-                );
-            }
 
             linkdata_entries[id].uncompressed_size = filesize as _;
             linkdata_entries[id].compressed_size = filesize as _;
             linkdata_entries[id].compressed = false;
+
             println!("[Chihaya] Successfully edited entry {} in LINKDATA", id);
         }
     }
@@ -93,7 +96,10 @@ fn hook_set_copyright_visibility(_is_visible: bool) {
 
 #[skyline::main(name = "masquerade")]
 pub fn main() {
-    println!("Masquerade-rs v{} - Persona 5 Scramble file replacement plugin", env!("CARGO_PKG_VERSION"));
+    println!(
+        "Masquerade-rs v{} - Persona 5 Scramble file replacement plugin",
+        env!("CARGO_PKG_VERSION")
+    );
 
     install_hook!(fake_core_number);
     install_hook!(hook_set_copyright_visibility);
