@@ -77,7 +77,7 @@ fn hook_initialize_linkdata_table() -> u32 {
     result
 }
 
-// Necessary to stop the game for crashing when loading thanks to Skyline using core 3
+// Necessary to stop the game from crashing when loading thanks to Skyline using core 3
 #[hook(offset = 0x12BB330)]
 fn fake_core_number() -> u64 {
     0
