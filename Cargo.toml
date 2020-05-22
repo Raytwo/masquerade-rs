@@ -1,0 +1,22 @@
+[package]
+name = "masquerade"
+version = "0.1.0"
+authors = ["Raytwo <raytwost@gmail.com>"]
+edition = "2018"
+
+[package.metadata.skyline]
+titleid = "01001c400e9d8000"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+skyline = { git = "https://github.com/ultimate-research/skyline-rs.git" }
+lazy_static = "1.4.0"
+
+[profile.dev]
+panic = "abort"
+
+[profile.release]
+panic = "abort"
+lto = true
