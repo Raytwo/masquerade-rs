@@ -1,6 +1,6 @@
 #![feature(proc_macro_hygiene)]
 
-use skyline::{hook, install_hook};
+use skyline::{hook, hooks, install_hooks};
 use std::slice;
 #[macro_use]
 mod forge;
@@ -8,20 +8,6 @@ use crate::forge::FORGE;
 
 // Latest update: 1.0.3
 const LINKDATA_ENTRY_COUNT: usize = 7321;
-
-#[repr(C)]
-pub enum Region {
-    Text,
-    Rodata,
-    Data,
-    Bss,
-    Heap,
-}
-
-extern "C" {
-    // Import this from Skyline to get the base address of the process
-    pub fn getRegionAddress(region: Region) -> *mut skyline::libc::c_void;
-}
 
 #[repr(C)]
 pub struct LinkdataEntry {
@@ -45,7 +31,7 @@ fn hook_initialize_linkdata_table() -> u32 {
     unsafe {
         // Get the LINKDATA table in memory and convert it to a slice for easy editing.
 
-        let text_address = getRegionAddress(Region::Text) as *mut u8;
+        let text_address = hooks::getRegionAddress(hooks::Region::Text) as *mut u8;
         let array_ptr = text_address.offset(0x22458C8);
         let linkdata_entries =
             slice::from_raw_parts_mut(array_ptr as *mut LinkdataEntry, LINKDATA_ENTRY_COUNT);
@@ -101,9 +87,11 @@ pub fn main() {
         env!("CARGO_PKG_VERSION")
     );
 
-    install_hook!(fake_core_number);
-    install_hook!(hook_set_copyright_visibility);
-    install_hook!(hook_initialize_linkdata_table);
+    install_hooks!(
+        fake_core_number,
+        hook_set_copyright_visibility,
+        hook_initialize_linkdata_table
+    );
 
     forge::init_forge();
 }

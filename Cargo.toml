@@ -6,6 +6,8 @@ edition = "2018"
 
 [package.metadata.skyline]
 titleid = "01001C400E9D8000"
+custom-npdm = "masquerade.npdm"
+subsdk-name = "subsdk1"
 
 [lib]
 crate-type = ["cdylib"]
