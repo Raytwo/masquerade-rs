@@ -66,12 +66,6 @@ fn hook_initialize_linkdata_table() -> u32 {
     result
 }
 
-// Necessary to stop the game from crashing when loading thanks to Skyline using core 3
-#[hook(offset = 0x12BB330)]
-fn fake_core_number() -> u64 {
-    0
-}
-
 // TODO: Add this method to skyline-rs
 // nn::oe::SetCopyrightVisibility
 #[hook(offset = 0x12BB260)]
@@ -88,7 +82,6 @@ pub fn main() {
     );
 
     install_hooks!(
-        fake_core_number,
         hook_set_copyright_visibility,
         hook_initialize_linkdata_table
     );

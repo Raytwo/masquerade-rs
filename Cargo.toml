@@ -1,13 +1,12 @@
 [package]
 name = "masquerade"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Raytwo <raytwost@gmail.com>"]
 edition = "2018"
 
 [package.metadata.skyline]
 titleid = "01001C400E9D8000"
 custom-npdm = "masquerade.npdm"
-subsdk-name = "subsdk1"
 
 [lib]
 crate-type = ["cdylib"]
